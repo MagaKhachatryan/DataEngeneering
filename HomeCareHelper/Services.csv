@@ -1,0 +1,46 @@
+Id,Name,CategoryId
+1,Vacuuming,1
+2,Mopping,1
+3,Dusting,1
+4,Bathroom cleaning,1
+5,Dish washing,1
+6,General tidying,1
+7,Laundry,1
+8, Window cleaning,2
+9,Replacing tap washers,2
+10, Replacing smoke alarm batteries,2
+11,Adjusting dropped gates or planing uneven doors,2
+12,Connecting sprinkler systems,2
+13,Mow your lawns,2
+15,Remove green waste,2
+16,cleaning gutters,3
+17,cleaning windows,3
+18,replacing tap washers,3
+19,installing smoke alarms or changing the batteries,3
+20,planing doors which have become stuck,3
+21,replacing hinges or knob.,3
+22,small plaster repairs in walls or ceiling,3
+23,re-grouting tiles in the bathroom or kitchen,3
+24,repairing fences and gates ,3
+25,wound care,4
+26,continence management,4
+27,stoma therapy,4
+28,diabetes care,4
+29,post-operative care,4
+30,medication management,4
+31,provide call access to emergency assistance,4
+32,transport to visit health practitioners,4
+33,hearing and vision services,4
+34,transport to and from shops,5
+35,help carrying shopping bags,5
+36,shopping assistance,5
+37,meal preparation,5
+38,help using eating utensils,5
+39,help with actual feeding ,5
+40,bathing,6
+41,showering,6
+42,personal hygiene and grooming,6
+43,dressing,6
+44,toileting,6
+45,mobility,6
+46,transfer in and out of bed,6

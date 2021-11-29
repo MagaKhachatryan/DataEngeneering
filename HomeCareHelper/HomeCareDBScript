@@ -1,0 +1,135 @@
+create table Country(
+Id        int primary key,
+Name      varchar(50) not null ,
+Call_code varchar(50) not null
+);
+
+create table City
+(
+Id int primary key,
+Name varchar(50) not null,
+Country_Id int ,
+constraint fk_Country_Id foreign key (Country_Id) references Country(Id)
+);
+
+create table Street
+(
+Id int primary key,
+Name varchar(50) not null,
+City_Id int ,
+constraint fk_City_Id foreign key (City_Id) references City(Id)
+);
+
+create table Address
+(
+Id int primary key,
+Street_Id int ,
+Building_number varchar(8) not null,
+constraint fk_Street_Id foreign key (Street_Id) references Street(Id)
+);
+
+create table Customer(
+Id int primary key,
+Name varchar(50) not null,
+Phone_Number varchar(20),
+Address_Id int,
+constraint fk_Address_Id foreign key (Address_Id) references Address(Id)
+);
+
+create table Currency
+(Id varchar(20) primary key);
+
+
+create table  Category
+(
+Id int primary key,
+Name varchar(30) not null
+);
+
+create table Service (
+Id int primary key,
+Name varchar(50) not null,
+Category_Id int ,
+constraint fk_Category_Id foreign key (Category_Id) references Category(Id));
+
+create table Worker_Stats(
+Id int primary key,
+Year int not null  ,
+Month int not null ,
+SumBenefit int not null ,
+OrderCount int not null,
+CanceledOrdersCount int not null,
+Check(Month in (1,2,3,4,5,6,7,8,9,10,11,12)),
+Check(Year > 2006));
+
+create table Worker (
+Id int primary key,
+Name varchar(50) not null,
+PhoneNumber varchar(50) not null,
+Worker_Stats_Id int  null,
+constraint fk_Worker_Stats_Id foreign key (Worker_Stats_Id) references Worker_Stats(Id));
+
+create table Company(
+Id int primary key,
+Name varchar(30),
+Offince_Number varchar(30) not null,
+Office_Address int not null,
+constraint fk_Office_Address foreign key (Office_Address) references Address(Id));
+
+
+
+create table Company_Worker(
+Id serial primary key,
+Worker_Id int,
+Company_Id int,
+Mean_Grade float,
+constraint fk_Worker_Id foreign key (Worker_Id) references Worker(Id),
+constraint fk_Company_Id foreign key (Company_Id) references Company(Id),
+Unique(Worker_Id,Company_Id));
+
+
+create table Company_Service(
+Id serial primary key,
+Company_Id int,
+Service_Id int,
+constraint  fk_Company_Id foreign key (Company_Id) references Company(Id),
+constraint  fk_Service_Id foreign key (Service_Id) references Service(Id),
+Unique(Service_Id,Company_Id));
+
+
+create table Company_Worker_Company_Service(
+Id serial primary key,
+Company_Worker_Id serial,
+Company_Service_Id serial,
+Benefit_Percent float not null,
+constraint fk_Company_Worker_Id foreign key (Company_Worker_Id) references Company_Worker(Id),
+constraint fk_Company_Service_Id foreign key (Company_Service_Id) references Company_Service(Id),
+Unique(Company_Worker_Id,Company_Service_Id));
+
+
+create table Worker_Feedback(
+Id serial primary key,
+Company_Worker_Id serial,
+Customer_Id int,
+Feedback varchar(100) not null,
+constraint fk_Company_Worker_Id foreign key (Company_Worker_Id) references Company_Worker(Id),
+constraint fk_Customer_Id foreign key (Customer_Id) references Customer(Id));
+
+
+create table Orders(
+Id serial primary key,
+State int not null,
+Customer_Id int,
+Company_Worker_Id serial,
+Company_Service_Id serial,
+RegisterDate timestamp not null,
+DoneDate timestamp,
+Grade int,
+IsGraded int not null,
+Currency_Id varchar(20) not null, 
+Price decimal  ,
+constraint fk_Currency_Id foreign key (Currency_Id) references Currency(Id),
+constraint fk_Company_Worker_Id foreign key (Company_Worker_Id) references Company_Worker(Id),
+constraint fk_Customer_Id foreign key (Customer_Id) references Customer(Id),
+constraint fk_Company_Service_Id foreign key (Company_Service_Id) references Company_Service(Id),
+check(State in (-1,1,2)))

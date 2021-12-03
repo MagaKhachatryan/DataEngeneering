@@ -1,0 +1,55 @@
+
+
+create temporary table temp(
+   worker_id int,
+   benefit int,
+  orderCount int);
+  
+insert into temp
+(select res.Company_Worker_Id as worker_id, sum(res.benefit) as benefit , count (res.benefit)
+ from 	
+(select  orders.Company_Worker_Id, orders.Company_Service_Id,
+(orders.Price  * ws.benefit_percent)/100 as benefit
+from Orders
+inner join company_worker_company_service as ws
+on Orders.company_worker_ID=ws.company_worker_ID AND
+	Orders.company_service_ID=ws.company_service_ID 
+ where Orders.IsChecked=false 
+ AND Orders.State=1) res
+	group by company_worker_ID );
+												
+insert into Company_Worker_Stats(Id,company_Worker_id,sumbenefit,ordercount,canceledorderscount,year,month)
+	( select nextval('stats_id'),	temp.worker_id,	temp.benefit,temp.orderCount,0,date_trunc('year',now()),date_trunc('month',now())
+ 	from temp
+ 	where temp.worker_id not in (select Company_Worker_Stats.Id from Company_Worker_Stats
+						 		inner join temp
+						 		on Company_Worker_Stats.company_Worker_id=temp.worker_id
+					  			where Company_Worker_Stats.year=date_trunc('year',now()) AND
+								Company_Worker_Stats.month=date_trunc('month',now()) AND
+	 							Company_Worker_Stats.company_Worker_id=temp.worker_id ));
+								--on conflict on constraint unique_stats DO
+
+	update 	Company_Worker_Stats
+	set sumbenefit =Company_Worker_Stats.sumbenefit + temp.benefit, 
+	ordercount=Company_Worker_Stats.orderCount+temp.orderCount
+	from temp
+	where Company_Worker_Stats.company_worker_id = temp.worker_id 
+	and Company_Worker_Stats.month=date_trunc('month',now())
+	and  Company_Worker_Stats.year=date_trunc('year',now());
+	
+	drop table temp;
+	create temporary table temp(Id int);
+	insert into temp (
+	select  Orders.Id from Orders
+	inner join company_worker_company_service as ws
+	on Orders.company_worker_ID=ws.company_worker_ID AND
+	Orders.company_service_ID=ws.company_service_ID 
+ 	where Orders.IsChecked=false 
+ 	AND Orders.State=1);
+		
+	update Orders 
+	set IsChecked=true  where Id in (select Id from temp) ;
+
+	drop table temp;
+	
+	 

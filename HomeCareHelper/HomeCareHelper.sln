@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\..\Downloads\Currencies.csv = ..\..\..\Downloads\Currencies.csv
 		..\..\..\Downloads\Customers.csv = ..\..\..\Downloads\Customers.csv
 		..\..\..\Downloads\HomeCareDBScript = ..\..\..\Downloads\HomeCareDBScript
+		ProcessOrdersJobScript = ProcessOrdersJobScript
 		..\..\..\Downloads\Services.csv = ..\..\..\Downloads\Services.csv
 		..\..\..\Downloads\Street.csv = ..\..\..\Downloads\Street.csv
 		..\..\..\Downloads\Workers.csv = ..\..\..\Downloads\Workers.csv

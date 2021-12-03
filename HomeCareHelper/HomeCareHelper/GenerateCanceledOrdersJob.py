@@ -7,7 +7,7 @@ import psycopg2
 import random
 import decimal
 
-class GenerateOrdersJob(j):
+class GenerateCanceledOrdersJob(j):
     RepeatInterval=None
     ConnStr=None
     def __init__(self,interval,connstr):
@@ -15,7 +15,7 @@ class GenerateOrdersJob(j):
         self.ConnStr=connstr
 
     def ExecuteJob(self):
-         count=10
+         count=5
          conn = psycopg2.connect(self.ConnStr)
          randomCustomers=self.__GetRandomIdList(conn,"Customer",count)
 
@@ -33,8 +33,6 @@ class GenerateOrdersJob(j):
             randomWorkers.append(workersIdList[ind])
             randomServices.append(servicesIdList[ind])
 
-         gradeList= [random.randrange(1, 6, 1) for i in range(count)]
-
          registrationDate=dt.now()
          registrationDateList=[registrationDate] * count
          minutesAdded = timedelta(minutes = 5)
@@ -49,10 +47,10 @@ class GenerateOrdersJob(j):
          i=0
          while i<count:
             values.append((randomCustomers[i],randomWorkers[i],randomServices[i],
-                          1,registrationDateList[i],doneDateList[i],gradeList[i],True,randomCurrencies[i],priceList[i]))
+                          0,registrationDateList[i],doneDateList[i],False,randomCurrencies[i],priceList[i]))
             i=i+1
 
-         sql = "INSERT INTO Orders(customer_id,company_worker_id,company_service_id,state,registerDate,doneDate,grade,isGraded,currency_Id,price)  VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+         sql = "INSERT INTO Orders(customer_id,company_worker_id,company_service_id,state,registerDate,doneDate,isGraded,currency_Id,price)  VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
          cur=conn.cursor()
          cur.executemany(sql,values)
          conn.commit()

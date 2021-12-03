@@ -33,19 +33,20 @@ class InitActions(object):
             tablename = key
             self.__LoadDataFromCSV(filepath,tablename,cur)
 
-    def __LoadSpecificTablesData(self,cur):        
+    def __LoadSpecificTablesData(self,cur):  
+        folderPath="C://Users//Maga//Downloads//"
         #region LoadWorkers
-        path = " 'C://Users//Maga//Downloads//Workers.csv '"
+        path = " '" + folderPath + "Workers.csv '"
         command = "COPY Worker(Id,name,phonenumber) FROM " + path + " DELIMITER ','  CSV HEADER;"
         cur.execute(command)
         #endregion
         #region LoadCompany_Workers
-        path = " 'C://Users//Maga//Downloads//Company_Workers.csv '"
+        path = " '" + folderPath + "Company_Workers.csv '"
         command = "create table temp(id int, worker_id int, company_id int); " + " COPY temp(worker_id,company_id) FROM  " + path + " DELIMITER ','  CSV HEADER; " + " insert into Company_Worker(Worker_Id,Company_Id) SELECT Worker_Id,Company_Id FROM temp GROUP BY Worker_Id,Company_Id HAVING COUNT(*) = 1; drop table temp;"
         cur.execute(command)
         #endregion
         #region LoadCompany_Services
-        path = " 'C://Users//Maga//Downloads//Company_Service.csv '"
+        path = " '" + folderPath + "Company_Service.csv '"
         command = "create table temp (company_id int, service_id int); " + " COPY temp(company_id,service_id) FROM  " + path + " DELIMITER ','  CSV HEADER; " + " insert into Company_Service(Company_Id,Service_Id) SELECT Company_Id,Service_Id FROM temp GROUP BY Company_Id, Service_id  HAVING COUNT(*) = 1; drop table temp"
         cur.execute(command)
         #endregion
@@ -98,14 +99,14 @@ class InitActions(object):
 
     
     def Init(self):
-        #conn = psycopg2.connect(self.Context.db_connection_string)
-        #cur = conn.cursor()
-        #self.__ExecuteSQLScript(cur)
-        #self.__LoadData(cur)
-        #self.__LoadSpecificTablesData(cur)
-        #self.__Generate_Company_Workers_Company_Service(conn)
-        #conn.commit()
-        #conn.close()
+        conn = psycopg2.connect(self.Context.db_connection_string)
+        cur = conn.cursor()
+        self.__ExecuteSQLScript(cur)
+        self.__LoadData(cur)
+        self.__LoadSpecificTablesData(cur)
+        self.__Generate_Company_Workers_Company_Service(conn)
+        conn.commit()
+        conn.close()
         self.__StartJobs()
 
 

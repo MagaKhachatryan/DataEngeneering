@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GenerateCanceledOrdersJob.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GenerateOrdersJob.py">
       <SubType>Code</SubType>
     </Compile>
@@ -32,6 +35,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Job.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProcessOrdersJob.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

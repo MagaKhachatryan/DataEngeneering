@@ -1,4 +1,5 @@
 import GenerateOrdersJob as g
+import ProcessOrdersJob as p
 
 class InitContext(object):
     db_connection_string = ""
@@ -21,8 +22,10 @@ class InitContext(object):
                               'category':'Categories.csv',
                               'service':'Services.csv',
                               'company':'Companies.csv'}
-        job=g.GenerateOrdersJob(1,self.db_connection_string)
-        self.Jobs.append(job)
+        jobG=g.GenerateOrdersJob(1,self.db_connection_string)
+        jobP=p.ProcessOrdersJob(1,self.db_connection_string)
+        self.Jobs.append(jobG)
+        self.Jobs.append(jobP)
 
         
 
